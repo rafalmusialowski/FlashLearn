@@ -1,5 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<style>
+  /* Styl dla paska nawigacyjnego */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 1em;
+  }
+  .navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5em 1em;
+  }
+  .navbar a:hover {
+    background-color: #575757;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+<!-- Pasek nawigacyjny -->
+<div class="navbar">
+  <div>
+    <a th:href="@{/dashboard}">Strona główna</a>
+  </div>
+  <div>
+    <a th:href="@{/logout}">Wyloguj</a>
+  </div>
+</div>
 <head>
   <title>Lista Fiszek</title>
   <link rel="stylesheet" href="/css/bootstrap.min.css">
