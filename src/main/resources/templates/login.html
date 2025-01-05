@@ -24,6 +24,9 @@
       <input type="password" id="password" name="password" class="form-control"/>
     </div>
     <button type="submit" class="btn btn-primary w-100">Zaloguj</button>
+    <div th:if="${param.error}" style="color: red;">
+      <p>Błąd: Nieprawidłowa nazwa użytkownika lub hasło!</p>
+    </div>
   </form>
 </div>
 <div style="text-align:center" >

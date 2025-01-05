@@ -45,7 +45,7 @@ public class AuthController {
             userService.registerUser(username, password);
             // Dodanie monitu o sukcesie do modelu
             model.addAttribute("message", "Rejestracja zakończona sukcesem!");
-            return "login"; // Przekierowanie na stronę logowania
+            return "register";
         } catch (Exception e) {
             // Obsługa błędu i dodanie monitu o błędzie
             model.addAttribute("error", "Błąd podczas rejestracji: " + e.getMessage());
