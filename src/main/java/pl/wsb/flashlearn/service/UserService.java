@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import pl.wsb.flashlearn.model.User;
 import pl.wsb.flashlearn.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 public class UserService implements UserDetailsService {
 
@@ -20,9 +22,18 @@ public class UserService implements UserDetailsService {
     }
 
     public void registerUser(String username, String password) {
+        // Sprawdzenie, czy użytkownik już istnieje
+        if (userRepository.findByUsername(username).isPresent()) {
+            throw new IllegalArgumentException("Użytkownik o takiej nazwie już istnieje.");
+        }
+
+        // Tworzenie nowego użytkownika
         User user = new User();
         user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(passwordEncoder.encode(password)); // Szyfrowanie hasła
+        user.setRole("USER"); // Przypisanie roli użytkownika
+
+        // Zapis do bazy danych
         userRepository.save(user);
     }
 
@@ -36,4 +47,8 @@ public class UserService implements UserDetailsService {
                 .roles("USER")
                 .build();
     }
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
 }
