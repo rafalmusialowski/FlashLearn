@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Dodaj/Edytuj Fiszkę</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container py-4">
+  <h1 class="text-center mb-4">Dodaj/Edytuj Fiszkę</h1>
+  <form th:action="@{/flashcards}" th:object="${flashcard}" method="post">
+    <div class="mb-3">
+      <label for="title" class="form-label">Tytuł</label>
+      <input type="text" id="title" name="title" th:value="*{title}" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Opis</label>
+      <textarea id="description" name="description" th:text="*{description}" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Zapisz</button>
+    <a href="/flashcards" class="btn btn-secondary">Anuluj</a>
+  </form>
+</div>
+</body>
+</html>
