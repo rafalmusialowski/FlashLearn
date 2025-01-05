@@ -14,6 +14,11 @@ import java.util.List;
 @Controller
 public class AuthController {
 
+    @GetMapping("/")
+    public String home() {
+        return "redirect:/login"; // Przekierowanie na stronę logowania
+    }
+
     @GetMapping("/login")
     public String login() {
         return "login"; // Szablon Thymeleaf dla logowania
