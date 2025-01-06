@@ -1,7 +1,7 @@
 package pl.wsb.flashlearn.service;
 
-import pl.wsb.flashlearn.model.Flashcard;
-import pl.wsb.flashlearn.repository.FlashcardRepository;
+import pl.wsb.flashlearn.model.FlashcardSet;
+import pl.wsb.flashlearn.repository.FlashcardSetsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,21 +10,21 @@ import java.util.Optional;
 @Service
 public class FlashcardService {
 
-    private final FlashcardRepository repository;
+    private final FlashcardSetsRepository repository;
 
-    public FlashcardService(FlashcardRepository repository) {
+    public FlashcardService(FlashcardSetsRepository repository) {
         this.repository = repository;
     }
 
-    public List<Flashcard> getAllFlashcards() {
+    public List<FlashcardSet> getAllFlashcardSets() {
         return repository.findAll();
     }
 
-    public Optional<Flashcard> getFlashcardById(String id) {
+    public Optional<FlashcardSet> getFlashcardSetById(String id) {
         return repository.findById(id);
     }
 
-    public Flashcard saveFlashcard(Flashcard flashcard) {
+    public FlashcardSet saveFlashcardSet(FlashcardSet flashcard) {
         return repository.save(flashcard);
     }
 

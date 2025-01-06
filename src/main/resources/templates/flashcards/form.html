@@ -6,8 +6,8 @@
 </head>
 <body>
 <div class="container py-4">
-  <h1 class="text-center mb-4">Dodaj/Edytuj Fiszkę</h1>
-  <form th:action="@{/flashcards}" th:object="${flashcard}" method="post">
+  <h1 class="text-center mb-4">Dodaj zbiór</h1>
+  <form th:action="@{/flashcards}" th:object="${flashcardset}" method="post">
     <div class="mb-3">
       <label for="title" class="form-label">Tytuł</label>
       <input type="text" id="title" name="title" th:value="*{title}" class="form-control" required>

@@ -1,6 +1,7 @@
 package pl.wsb.flashlearn.controller;
 
 import pl.wsb.flashlearn.model.Flashcard;
+import pl.wsb.flashlearn.model.FlashcardSet;
 import pl.wsb.flashlearn.service.FlashcardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,25 +21,25 @@ public class FlashcardController {
 
     @GetMapping
     public String flashcardsDashboard(Model model) {
-        model.addAttribute("flashcards", service.getAllFlashcards());
+        model.addAttribute("flashcards", service.getAllFlashcardSets());
         return "flashcards/dashboard";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/new_set")
     public String showCreateForm(Model model) {
-        model.addAttribute("flashcard", new Flashcard());
+        model.addAttribute("flashcardset", new FlashcardSet());
         return "flashcards/form";
     }
 
     @PostMapping
-    public String createFlashcard(@ModelAttribute Flashcard flashcard) {
-        service.saveFlashcard(flashcard);
+    public String createFlashcardSet(@ModelAttribute FlashcardSet set) {
+        service.saveFlashcardSet(set);
         return "redirect:/flashcards";
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable String id, Model model) {
-        Optional<Flashcard> flashcard = service.getFlashcardById(id);
+        Optional<FlashcardSet> flashcard = service.getFlashcardSetById(id);
         if (flashcard.isPresent()) {
             model.addAttribute("flashcard", flashcard.get());
             return "flashcards/form";
@@ -48,9 +49,9 @@ public class FlashcardController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateFlashcard(@PathVariable String id, @ModelAttribute Flashcard flashcard) {
+    public String updateFlashcard(@PathVariable String id, @ModelAttribute FlashcardSet flashcard) {
         flashcard.setId(id);
-        service.saveFlashcard(flashcard);
+        service.saveFlashcardSet(flashcard);
         return "redirect:/flashcards";
     }
 
