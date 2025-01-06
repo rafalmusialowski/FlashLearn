@@ -35,14 +35,33 @@
       <label for="description" class="form-label">Flashcard description</label>
       <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Add flashcard</button>
+    <div class="text-center"><button type="submit" class="btn btn-primary">Add flashcard</button></div>
+
   </form>
-  <h3>Lista fiszek</h3>
-  <ul>
-    <li th:each="flashcard : ${flashcardSet.flashcards}">
-      <strong th:text="${flashcard.name}"></strong>: <span th:text="${flashcard.description}"></span>
-    </li>
-  </ul>
+  <div class="container mt-5">
+    <h3 style="margin-top: 50px;">Flashcard list:</h3>
+    <table class="table table-dark table-striped" style="border-radius: 20px; overflow: hidden; border-collapse: separate;" >
+      <thead>
+      <tr>
+        <th style="color: white;" scope="col">Flashcard Name</th>
+        <th style="color: white;" scope="col">Description</th>
+        <th style="color: white;" class="text-end">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr style="color: white;" th:each="flashcard : ${flashcardSet.flashcards}">
+        <td style="color: white;" th:text="${flashcard.name}">Flashcard Name</td>
+        <td style="color: white;" th:text="${flashcard.description}">Flashcard Description</td>
+        <td class="text-end">
+          <a  th:href="@{/flashcards/topic/{title}/delete/{flashcardName}(title=${flashcardSet.title}, flashcardName=${flashcard.name})}"
+             class="btn btn-danger btn-sm">Delete</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+
 </div>
 
 

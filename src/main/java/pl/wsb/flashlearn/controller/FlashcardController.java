@@ -104,6 +104,35 @@ public class FlashcardController {
 
         return "redirect:/flashcards/topic/" + title;
     }
+    @GetMapping("/topic/{title}/edit/{flashcardName}")
+    public String showEditFlashcardForm(@PathVariable String title, @PathVariable String flashcardName, Model model) {
+        Optional<FlashcardSet> flashcardSetOptional = service.getFlashcardSetByTitle(title);
+        if (flashcardSetOptional.isPresent()) {
+            FlashcardSet flashcardSet = flashcardSetOptional.get();
+            for (Flashcard flashcard : flashcardSet.getFlashcards()) {
+                if (flashcard.getName().equals(flashcardName)) {
+                    model.addAttribute("flashcard", flashcard);
+                    model.addAttribute("flashcardSetTitle", title);
+                    return "flashcards/edit-flashcard";
+                }
+            }
+        }
+        return "redirect:/flashcards/topic/" + title;
+    }
+
+    @PostMapping("/topic/{title}/update/{flashcardName}")
+    public String updateFlashcard(@PathVariable String title, @PathVariable String flashcardName,
+                                  @RequestParam String name, @RequestParam String description) {
+        Flashcard updatedFlashcard = new Flashcard(name, description);
+        service.updateFlashcard(title, flashcardName, updatedFlashcard);
+        return "redirect:/flashcards/topic/" + title;
+    }
+
+    @GetMapping("/topic/{title}/delete/{flashcardName}")
+    public String deleteFlashcard(@PathVariable String title, @PathVariable String flashcardName) {
+        service.deleteFlashcard(title, flashcardName);
+        return "redirect:/flashcards/topic/" + title;
+    }
 
 
 

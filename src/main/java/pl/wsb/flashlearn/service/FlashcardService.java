@@ -60,6 +60,34 @@ public class FlashcardService {
         repository.save(flashcardSet); // Zapisujemy zbiór z nową fiszką
     }
 
+    public void updateFlashcard(String title, String flashcardName, Flashcard updatedFlashcard) {
+        Optional<FlashcardSet> flashcardSetOptional = repository.findByTitle(title);
+        if (flashcardSetOptional.isPresent()) {
+            FlashcardSet flashcardSet = flashcardSetOptional.get();
+            for (Flashcard flashcard : flashcardSet.getFlashcards()) {
+                if (flashcard.getName().equals(flashcardName)) {
+                    flashcard.setName(updatedFlashcard.getName());
+                    flashcard.setDescription(updatedFlashcard.getDescription());
+                    repository.save(flashcardSet);
+                    return;
+                }
+            }
+            throw new RuntimeException("Flashcard not found");
+        } else {
+            throw new RuntimeException("Topic not found");
+        }
+    }
+
+    public void deleteFlashcard(String title, String flashcardName) {
+        Optional<FlashcardSet> flashcardSetOptional = repository.findByTitle(title);
+        if (flashcardSetOptional.isPresent()) {
+            FlashcardSet flashcardSet = flashcardSetOptional.get();
+            flashcardSet.getFlashcards().removeIf(flashcard -> flashcard.getName().equals(flashcardName));
+            repository.save(flashcardSet);
+        } else {
+            throw new RuntimeException("Topic not found");
+        }
+    }
 
 
 
