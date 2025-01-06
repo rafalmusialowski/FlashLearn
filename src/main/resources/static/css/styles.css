@@ -10,41 +10,50 @@ body {
     padding: 1em;
     border-bottom: 1px solid #333;
 }
-.form-control, .form-label, .btn-primary, .register-button {
-    background-color: #1e1e1e;
-    color: #ffffff;
-    border-color: #333333;
+.navbar a {
+    color: #00bcd4;
+    text-decoration: none;
+    padding: 0.5em 1em;
 }
-.form-control:focus {
-    background-color: #1e1e1e;
-    color: #ffffff;
-    border-color: #00bcd4; /* Dodany kontrastowy kolor */
-    box-shadow: 0 0 5px #00bcd4;
+.navbar a:hover {
+    background-color: #333;
+    border-radius: 4px;
+    color: #66cfff;
+}
+h1 {
+    color: #00bcd4;
+    font-weight: bold;
 }
 .btn-primary {
-    border-color: #555555;
+    background-color: #00bcd4;
+    border-color: #0097a7;
 }
 .btn-primary:hover {
-    background-color: #00bcd4; /* Kolor kontrastowy */
-    color: #ffffff;
-    border-color: #0097a7;
+    background-color: #0097a7;
+    border-color: #007c91;
 }
-.register-button {
-    background-color: #6c757d;
-    border-color: #5a6268;
-    color: #ffffff;
+.btn-warning {
+    background-color: #ffb300;
+    border-color: #ffa000;
 }
-.register-button:hover {
-    background-color: #00bcd4; /* Kontrastowy kolor */
-    color: #ffffff;
-    border-color: #0097a7;
+.btn-warning:hover {
+    background-color: #ffa000;
+    border-color: #ff8f00;
 }
-.alert-danger {
+.btn-danger {
     background-color: #d32f2f;
-    color: #ffffff;
     border-color: #b71c1c;
 }
-.highlight {
-    color: #00bcd4; /* Kolor akcentowy */
-    font-weight: bold;
+.btn-danger:hover {
+    background-color: #b71c1c;
+    border-color: #ff5252;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #1e1e1e;
+}
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #2c2c2c;
+}
+.table th, .table td {
+    color: #333;
 }
