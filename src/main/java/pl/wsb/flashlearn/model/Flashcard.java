@@ -1,15 +1,13 @@
 package pl.wsb.flashlearn.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id; // Spring Data MongoDB
 
-@Document(collection = "flashcards")
 public class Flashcard {
 
     @Id
-    private String id;
-    private String title;
-    private String description;
+    private String id; // Odpowiada polu "_id" w MongoDB
+    private String question; // Pytanie fiszki
+    private String answer;   // Odpowiedź fiszki
 
     // Gettery i Settery
     public String getId() {
@@ -20,19 +18,29 @@ public class Flashcard {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getQuestion() {
+        return question;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setQuestion(String question) {
+        this.question = question;
     }
 
-    public String getDescription() {
-        return description;
+    public String getAnswer() {
+        return answer;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    // Konstruktor bezargumentowy (wymagany przez frameworki jak Spring)
+    public Flashcard() {}
+
+    // Konstruktor dla wygodniejszego tworzenia obiektów
+    public Flashcard(String id, String question, String answer) {
+        this.id = id;
+        this.question = question;
+        this.answer = answer;
     }
 }

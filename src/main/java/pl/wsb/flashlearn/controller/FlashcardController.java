@@ -1,6 +1,7 @@
 package pl.wsb.flashlearn.controller;
 
 import pl.wsb.flashlearn.model.Flashcard;
+import pl.wsb.flashlearn.model.FlashcardSet;
 import pl.wsb.flashlearn.service.FlashcardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,25 +21,20 @@ public class FlashcardController {
 
     @GetMapping
     public String flashcardsDashboard(Model model) {
-        model.addAttribute("flashcards", service.getAllFlashcards());
+        model.addAttribute("flashcards", service.getAllFlashcardSets());
         return "flashcards/dashboard";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/new_set")
     public String showCreateForm(Model model) {
-        model.addAttribute("flashcard", new Flashcard());
+        model.addAttribute("flashcardset", new FlashcardSet());
         return "flashcards/form";
     }
 
-    @PostMapping
-    public String createFlashcard(@ModelAttribute Flashcard flashcard) {
-        service.saveFlashcard(flashcard);
-        return "redirect:/flashcards";
-    }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable String id, Model model) {
-        Optional<Flashcard> flashcard = service.getFlashcardById(id);
+        Optional<FlashcardSet> flashcard = service.getFlashcardSetById(id);
         if (flashcard.isPresent()) {
             model.addAttribute("flashcard", flashcard.get());
             return "flashcards/form";
@@ -48,9 +44,9 @@ public class FlashcardController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateFlashcard(@PathVariable String id, @ModelAttribute Flashcard flashcard) {
+    public String updateFlashcard(@PathVariable String id, @ModelAttribute FlashcardSet flashcard) {
         flashcard.setId(id);
-        service.saveFlashcard(flashcard);
+        service.saveFlashcardSet(flashcard);
         return "redirect:/flashcards";
     }
 
@@ -59,4 +55,39 @@ public class FlashcardController {
         service.deleteFlashcard(id);
         return "redirect:/flashcards";
     }
+    @GetMapping("/topic/{title}")
+    public String viewTopic(@PathVariable String title, Model model) {
+        FlashcardSet flashcardSet = service.getFlashcardSetByTitle(title)
+                .orElseThrow(() -> new RuntimeException("FlashcardSet not found with title: " + title));
+        model.addAttribute("flashcardSet", flashcardSet);
+        return "flashcards/topic"; // Widok szczegółów tematu
+    }
+    @PostMapping
+    public String createFlashcardSet(@RequestParam("name") String name,
+                                     @RequestParam("description") String description,
+                                     Model model) {
+        // Sprawdź, czy nazwa została podana
+        if (name == null || name.isEmpty()) {
+            model.addAttribute("error", "Nazwa zbioru nie może być pusta!");
+            return "flashcards/form";
+        }
+
+        // Sprawdź, czy zbiór o tej nazwie już istnieje
+        Optional<FlashcardSet> existingSet = service.getFlashcardSetByTitle(name);
+        if (existingSet.isPresent()) {
+            model.addAttribute("error", "Zbiór o nazwie '" + name + "' już istnieje!");
+            return "flashcards/form";
+        }
+
+        // Utwórz nowy zbiór
+        FlashcardSet newSet = new FlashcardSet();
+        newSet.setTitle(name);
+        newSet.setDescription(description);
+        service.saveFlashcardSet(newSet);
+
+        return "redirect:/flashcards";
+    }
+
+
+
 }

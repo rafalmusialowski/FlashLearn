@@ -31,7 +31,7 @@
       font-weight: bold;
     }
     .btn-primary {
-      background-color: #00bcd4;
+      background-color: rgba(155, 159, 158, 0.34);
       border-color: #0097a7;
     }
     .btn-primary:hover {
@@ -66,6 +66,7 @@
   </style>
 </head>
 <body>
+
 <!-- Pasek nawigacyjny -->
 <div class="navbar">
   <div>
@@ -74,40 +75,18 @@
     </a>
   </div>
   <div>
+    <a type="submit" class="btn btn-primary"> Start Learning!</a>
+  </div>
+  <div>
     <a th:href="@{/logout}" class="btn btn-danger">Logout</a>
   </div>
 </div>
-
-<div class="container py-4">
-  <a href="/flashcards/new_set" class="btn btn-primary mb-3" style="display: grid">Add a new topic</a>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
 <head>
-
-  <title>Lista tematów</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <title>Temat</title>
 </head>
 <body>
-<div class="container mt-5">
-  <h1 class="text-center mb-4">Topics</h1>
-  <div class="row row-cols-1 row-cols-md-3 g-4">
-    <div class="col" th:each="set : ${flashcards}">
-      <div class="card h-100">
-        <div class="card-body">
-
-
-          <h5 class="card-title" th:text="${set.title}">Topic name</h5>
-          <p class="card-text" th:text="${set.description}">Topic description</p>
-          <div class="card-footer text-end">
-            <a th:href="@{/flashcards/topic/{title}(title=${set.title})}" class="btn btn-primary">Chose Topic</a>
-          <a th:href="@{/flashcards/delete/{id}(id=${set.id})}" class="btn btn-danger">Delete</a>
-            </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<h1 th:text="${flashcardSet.title}">Topic</h1>
+<p th:text="${flashcardSet.description}">Topic Description</p>
+</body>
 </body>
 </html>
