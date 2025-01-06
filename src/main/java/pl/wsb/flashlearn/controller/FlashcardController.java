@@ -87,6 +87,24 @@ public class FlashcardController {
 
         return "redirect:/flashcards";
     }
+    @PostMapping("/topic/{title}/add")
+    public String addFlashcardToTopic(@PathVariable String title,
+                                      @RequestParam String name,
+                                      @RequestParam String description,
+                                      Model model) {
+        Optional<FlashcardSet> flashcardSetOptional = service.getFlashcardSetByTitle(title);
+        if (flashcardSetOptional.isEmpty()) {
+            model.addAttribute("error", "Topic not found");
+            return "flashcards/topic";
+        }
+
+        FlashcardSet flashcardSet = flashcardSetOptional.get();
+        Flashcard flashcard = new Flashcard(name, description);
+        service.addFlashcardToTopic(title, flashcard);
+
+        return "redirect:/flashcards/topic/" + title;
+    }
+
 
 
 

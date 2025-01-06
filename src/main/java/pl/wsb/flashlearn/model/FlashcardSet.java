@@ -3,6 +3,9 @@ package pl.wsb.flashlearn.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Document(collection = "sets")
 public class FlashcardSet {
 
@@ -10,7 +13,7 @@ public class FlashcardSet {
     private String id;
     private String title;
     private String description;
-
+    private List<Flashcard> flashcards = new ArrayList<>();
     public FlashcardSet() {}
     public FlashcardSet(String id, String title, String description) {}
     public FlashcardSet(String title, String description) {}
@@ -38,5 +41,14 @@ public class FlashcardSet {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+
+    public List<Flashcard> getFlashcards() {
+        return flashcards;
+    }
+
+    public void setFlashcards(List<Flashcard> flashcards) {
+        this.flashcards = flashcards;
     }
 }

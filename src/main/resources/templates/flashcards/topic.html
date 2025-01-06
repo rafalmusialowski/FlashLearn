@@ -24,9 +24,28 @@
 <head>
   <title>Temat</title>
 </head>
-<body>
-<h1 th:text="${flashcardSet.title}">Topic</h1>
-<p th:text="${flashcardSet.description}">Topic Description</p>
-</body>
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Add new flashcard</h1>
+  <form th:action="@{/flashcards/topic/{title}/add(title=${flashcardSet.title})}" method="post" class="mt-4">
+    <div class="mb-3">
+      <label for="name" class="form-label">Flashcard name</label>
+      <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Flashcard description</label>
+      <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Add flashcard</button>
+  </form>
+  <h3>Lista fiszek</h3>
+  <ul>
+    <li th:each="flashcard : ${flashcardSet.flashcards}">
+      <strong th:text="${flashcard.name}"></strong>: <span th:text="${flashcard.description}"></span>
+    </li>
+  </ul>
+</div>
+
+
+
 </body>
 </html>

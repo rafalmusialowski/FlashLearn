@@ -1,5 +1,6 @@
 package pl.wsb.flashlearn.service;
 
+import pl.wsb.flashlearn.model.Flashcard;
 import pl.wsb.flashlearn.model.FlashcardSet;
 import pl.wsb.flashlearn.repository.FlashcardSetsRepository;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,18 @@ public class FlashcardService {
 
         return repository.save(newSet);
     }
+    public void addFlashcardToTopic(String title, Flashcard flashcard) {
+        Optional<FlashcardSet> flashcardSetOptional = repository.findByTitle(title);
+        if (flashcardSetOptional.isEmpty()) {
+            throw new RuntimeException("Topic not found");
+        }
+
+        FlashcardSet flashcardSet = flashcardSetOptional.get();
+        flashcardSet.getFlashcards().add(flashcard); // Dodajemy fiszkę do listy w zbiorze
+        repository.save(flashcardSet); // Zapisujemy zbiór z nową fiszką
+    }
+
+
 
 
 
