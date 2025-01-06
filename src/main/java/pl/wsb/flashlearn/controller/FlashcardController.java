@@ -31,11 +31,6 @@ public class FlashcardController {
         return "flashcards/form";
     }
 
-    @PostMapping
-    public String createFlashcardSet(@ModelAttribute FlashcardSet set) {
-        service.saveFlashcardSet(set);
-        return "redirect:/flashcards";
-    }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable String id, Model model) {
@@ -60,4 +55,39 @@ public class FlashcardController {
         service.deleteFlashcard(id);
         return "redirect:/flashcards";
     }
+    @GetMapping("/topic/{title}")
+    public String viewTopic(@PathVariable String title, Model model) {
+        FlashcardSet flashcardSet = service.getFlashcardSetByTitle(title)
+                .orElseThrow(() -> new RuntimeException("FlashcardSet not found with title: " + title));
+        model.addAttribute("flashcardSet", flashcardSet);
+        return "flashcards/topic"; // Widok szczegółów tematu
+    }
+    @PostMapping
+    public String createFlashcardSet(@RequestParam("name") String name,
+                                     @RequestParam("description") String description,
+                                     Model model) {
+        // Sprawdź, czy nazwa została podana
+        if (name == null || name.isEmpty()) {
+            model.addAttribute("error", "Nazwa zbioru nie może być pusta!");
+            return "flashcards/form";
+        }
+
+        // Sprawdź, czy zbiór o tej nazwie już istnieje
+        Optional<FlashcardSet> existingSet = service.getFlashcardSetByTitle(name);
+        if (existingSet.isPresent()) {
+            model.addAttribute("error", "Zbiór o nazwie '" + name + "' już istnieje!");
+            return "flashcards/form";
+        }
+
+        // Utwórz nowy zbiór
+        FlashcardSet newSet = new FlashcardSet();
+        newSet.setTitle(name);
+        newSet.setDescription(description);
+        service.saveFlashcardSet(newSet);
+
+        return "redirect:/flashcards";
+    }
+
+
+
 }

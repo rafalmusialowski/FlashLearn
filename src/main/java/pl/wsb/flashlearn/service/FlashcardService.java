@@ -31,4 +31,24 @@ public class FlashcardService {
     public void deleteFlashcard(String id) {
         repository.deleteById(id);
     }
+    public Optional<FlashcardSet> getFlashcardSetByTitle(String title) {
+        return repository.findByTitle(title);
+    }
+    public FlashcardSet createFlashcardSet(String title, String description) {
+        // Sprawdzenie, czy istnieje zbiór o tej nazwie
+        Optional<FlashcardSet> existingSet = repository.findByTitle(title);
+        if (existingSet.isPresent()) {
+            throw new IllegalArgumentException("Zbiór o podanej nazwie już istnieje!");
+        }
+
+        // Utworzenie nowego zbioru
+        FlashcardSet newSet = new FlashcardSet();
+        newSet.setTitle(title);
+        newSet.setDescription(description);
+
+        return repository.save(newSet);
+    }
+
+
+
 }
