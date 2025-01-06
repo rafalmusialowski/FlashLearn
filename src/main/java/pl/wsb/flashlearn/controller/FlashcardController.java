@@ -19,9 +19,9 @@ public class FlashcardController {
     }
 
     @GetMapping
-    public String listFlashcards(Model model) {
+    public String flashcardsDashboard(Model model) {
         model.addAttribute("flashcards", service.getAllFlashcards());
-        return "flashcards/list";
+        return "flashcards/dashboard";
     }
 
     @GetMapping("/new")
