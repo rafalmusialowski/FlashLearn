@@ -23,7 +23,10 @@ public class UserService implements UserDetailsService {
 
     public void registerUser(String username, String password) {
         if (userRepository.findByUsername(username).isPresent()) {
-            throw new IllegalArgumentException("Użytkownik o takiej nazwie już istnieje.");
+            throw new IllegalArgumentException("A user with that name already exists");
+        }
+        if (password.length() < 6) {
+            throw new IllegalArgumentException("Password must be at least 6 characters");
         }
 
         User user = new User();

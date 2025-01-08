@@ -142,7 +142,7 @@ public class FlashcardController {
         FlashcardSet flashcardSet = service.getFlashcardSetByTitle(title)
                 .orElseThrow(() -> new RuntimeException("Topic not found with title: " + title));
         List<Flashcard> flashcards = flashcardSet.getFlashcards();
-        Collections.shuffle(flashcards); // Losowe przetasowanie listy fiszek
+        Collections.shuffle(flashcards);
         return flashcards;
     }
     @GetMapping("/topic/{title}/start")
@@ -150,6 +150,4 @@ public class FlashcardController {
         model.addAttribute("title", title);
         return "flashcards/study";
     }
-
-
 }

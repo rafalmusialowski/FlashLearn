@@ -40,7 +40,7 @@ public class FlashcardService {
     public FlashcardSet createFlashcardSet(String title, String description) {
         Optional<FlashcardSet> existingSet = repository.findByTitle(title);
         if (existingSet.isPresent()) {
-            throw new IllegalArgumentException("Zbiór o podanej nazwie już istnieje!");
+            throw new IllegalArgumentException("A collection with the given name already exists!");
         }
 
         FlashcardSet newSet = new FlashcardSet();
