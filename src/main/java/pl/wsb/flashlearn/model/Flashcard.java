@@ -1,7 +1,5 @@
 package pl.wsb.flashlearn.model;
 
-import org.springframework.data.annotation.Id; // Spring Data MongoDB
-
 public class Flashcard {
     private String name;
     private String description;

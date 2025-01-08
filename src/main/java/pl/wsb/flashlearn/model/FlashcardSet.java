@@ -15,10 +15,7 @@ public class FlashcardSet {
     private String description;
     private List<Flashcard> flashcards = new ArrayList<>();
     public FlashcardSet() {}
-    public FlashcardSet(String id, String title, String description) {}
-    public FlashcardSet(String title, String description) {}
 
-    // Gettery i Settery
     public String getId() {
         return id;
     }

@@ -31,7 +31,6 @@ public class FlashcardController {
         return "flashcards/form";
     }
 
-
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable String id, Model model) {
         Optional<FlashcardSet> flashcard = service.getFlashcardSetById(id);
@@ -55,6 +54,7 @@ public class FlashcardController {
         service.deleteFlashcard(id);
         return "redirect:/flashcards";
     }
+
     @GetMapping("/topic/{title}")
     public String viewTopic(@PathVariable String title, Model model) {
         FlashcardSet flashcardSet = service.getFlashcardSetByTitle(title)
@@ -62,24 +62,23 @@ public class FlashcardController {
         model.addAttribute("flashcardSet", flashcardSet);
         return "flashcards/topic";
     }
+
     @PostMapping
     public String createFlashcardSet(@RequestParam("name") String name,
                                      @RequestParam("description") String description,
                                      Model model) {
-        // Sprawdź, czy nazwa została podana
+
         if (name == null || name.isEmpty()) {
             model.addAttribute("error", "The topic name must not be empty!");
             return "flashcards/form";
         }
 
-        // Sprawdź, czy zbiór o tej nazwie już istnieje
         Optional<FlashcardSet> existingSet = service.getFlashcardSetByTitle(name);
         if (existingSet.isPresent()) {
             model.addAttribute("error", "Topic with name '" + name + "' already exists!");
             return "flashcards/form";
         }
 
-        // Utwórz nowy zbiór
         FlashcardSet newSet = new FlashcardSet();
         newSet.setTitle(name);
         newSet.setDescription(description);
@@ -87,6 +86,7 @@ public class FlashcardController {
 
         return "redirect:/flashcards";
     }
+
     @PostMapping("/topic/{title}/add")
     public String addFlashcardToTopic(@PathVariable String title,
                                       @RequestParam String name,
@@ -104,6 +104,7 @@ public class FlashcardController {
 
         return "redirect:/flashcards/topic/" + title;
     }
+
     @GetMapping("/topic/{title}/edit/{flashcardName}")
     public String showEditFlashcardForm(@PathVariable String title, @PathVariable String flashcardName, Model model) {
         Optional<FlashcardSet> flashcardSetOptional = service.getFlashcardSetByTitle(title);

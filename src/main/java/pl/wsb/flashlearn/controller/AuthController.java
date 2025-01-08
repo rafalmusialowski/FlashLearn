@@ -14,6 +14,8 @@ import java.util.List;
 @Controller
 public class AuthController {
 
+    private final UserService userService;
+
     @GetMapping("/**")
     public String home() {
         return "redirect:/login";
@@ -35,8 +37,6 @@ public class AuthController {
         return userService.getAllUsers();
     }
 
-    private final UserService userService;
-
     public AuthController(UserService userService) {
         this.userService = userService;
     }
@@ -54,5 +54,4 @@ public class AuthController {
             return "register";
         }
     }
-
 }

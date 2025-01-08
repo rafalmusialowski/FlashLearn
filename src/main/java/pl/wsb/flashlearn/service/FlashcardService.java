@@ -32,23 +32,24 @@ public class FlashcardService {
     public void deleteFlashcard(String id) {
         repository.deleteById(id);
     }
+
     public Optional<FlashcardSet> getFlashcardSetByTitle(String title) {
         return repository.findByTitle(title);
     }
+
     public FlashcardSet createFlashcardSet(String title, String description) {
-        // Sprawdzenie, czy istnieje zbiór o tej nazwie
         Optional<FlashcardSet> existingSet = repository.findByTitle(title);
         if (existingSet.isPresent()) {
             throw new IllegalArgumentException("Zbiór o podanej nazwie już istnieje!");
         }
 
-        // Utworzenie nowego zbioru
         FlashcardSet newSet = new FlashcardSet();
         newSet.setTitle(title);
         newSet.setDescription(description);
 
         return repository.save(newSet);
     }
+
     public void addFlashcardToTopic(String title, Flashcard flashcard) {
         Optional<FlashcardSet> flashcardSetOptional = repository.findByTitle(title);
         if (flashcardSetOptional.isEmpty()) {
@@ -56,8 +57,8 @@ public class FlashcardService {
         }
 
         FlashcardSet flashcardSet = flashcardSetOptional.get();
-        flashcardSet.getFlashcards().add(flashcard); // Dodajemy fiszkę do listy w zbiorze
-        repository.save(flashcardSet); // Zapisujemy zbiór z nową fiszką
+        flashcardSet.getFlashcards().add(flashcard);
+        repository.save(flashcardSet);
     }
 
     public void updateFlashcard(String title, String flashcardName, Flashcard updatedFlashcard) {
@@ -88,8 +89,4 @@ public class FlashcardService {
             throw new RuntimeException("Topic not found");
         }
     }
-
-
-
-
 }
