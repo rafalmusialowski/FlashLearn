@@ -6,9 +6,7 @@ public class Flashcard {
     private String name;
     private String description;
 
-    public Flashcard() {
-        // Bezparametrowy konstruktor potrzebny dla MongoDB i Springa
-    }
+    public Flashcard() {}
 
     public Flashcard(String name, String description) {
         this.name = name;

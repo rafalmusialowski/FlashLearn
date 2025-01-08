@@ -60,7 +60,7 @@ public class FlashcardController {
         FlashcardSet flashcardSet = service.getFlashcardSetByTitle(title)
                 .orElseThrow(() -> new RuntimeException("FlashcardSet not found with title: " + title));
         model.addAttribute("flashcardSet", flashcardSet);
-        return "flashcards/topic"; // Widok szczegółów tematu
+        return "flashcards/topic";
     }
     @PostMapping
     public String createFlashcardSet(@RequestParam("name") String name,
@@ -68,14 +68,14 @@ public class FlashcardController {
                                      Model model) {
         // Sprawdź, czy nazwa została podana
         if (name == null || name.isEmpty()) {
-            model.addAttribute("error", "Nazwa zbioru nie może być pusta!");
+            model.addAttribute("error", "The topic name must not be empty!");
             return "flashcards/form";
         }
 
         // Sprawdź, czy zbiór o tej nazwie już istnieje
         Optional<FlashcardSet> existingSet = service.getFlashcardSetByTitle(name);
         if (existingSet.isPresent()) {
-            model.addAttribute("error", "Zbiór o nazwie '" + name + "' już istnieje!");
+            model.addAttribute("error", "Topic with name '" + name + "' already exists!");
             return "flashcards/form";
         }
 
@@ -133,8 +133,4 @@ public class FlashcardController {
         service.deleteFlashcard(title, flashcardName);
         return "redirect:/flashcards/topic/" + title;
     }
-
-
-
-
 }

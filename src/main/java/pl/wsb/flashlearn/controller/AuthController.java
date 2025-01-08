@@ -16,17 +16,17 @@ public class AuthController {
 
     @GetMapping("/**")
     public String home() {
-        return "redirect:/login"; // Przekierowanie na stronę logowania
+        return "redirect:/login";
     }
 
     @GetMapping("/login")
     public String login() {
-        return "login"; // Szablon Thymeleaf dla logowania
+        return "login";
     }
 
     @GetMapping("/register")
     public String register() {
-        return "register"; // Szablon Thymeleaf dla rejestracji
+        return "register";
     }
 
     @GetMapping("/all-users")
@@ -46,15 +46,12 @@ public class AuthController {
                            @RequestParam String password,
                            Model model) {
         try {
-            // Wywołanie logiki rejestracji użytkownika w UserService
             userService.registerUser(username, password);
-            // Dodanie monitu o sukcesie do modelu
-            model.addAttribute("message", "Rejestracja zakończona sukcesem!");
+            model.addAttribute("message", "Registration completed with success!");
             return "register";
         } catch (Exception e) {
-            // Obsługa błędu i dodanie monitu o błędzie
-            model.addAttribute("error", "Błąd podczas rejestracji: " + e.getMessage());
-            return "register"; // Powrót do strony rejestracji
+            model.addAttribute("error", "Error during registration: " + e.getMessage());
+            return "register";
         }
     }
 
