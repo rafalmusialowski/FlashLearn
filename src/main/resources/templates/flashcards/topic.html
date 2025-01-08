@@ -14,7 +14,7 @@
     </a>
   </div>
   <div>
-    <a type="submit" class="btn btn-primary"> Start Learning!</a>
+    <a th:href="@{/flashcards/topic/{title}/start(title=${flashcardSet.title})}" type="submit" class="btn btn-start-learning"> Start Learning!</a>
   </div>
   <div>
     <a th:href="@{/logout}" class="btn btn-danger">Logout</a>

@@ -57,3 +57,13 @@ h1 {
 .table th, .table td {
     color: #333;
 }
+
+.btn-start-learning{
+    background-color: #333;
+    border-color: #007c91;
+    margin-right: auto;
+}
+.btn-start-learning:hover {
+    background-color: #0097a7;
+    border-color: #fbfbfb;
+}

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -134,4 +136,20 @@ public class FlashcardController {
         service.deleteFlashcard(title, flashcardName);
         return "redirect:/flashcards/topic/" + title;
     }
+    @GetMapping("/topic/{title}/study")
+    @ResponseBody
+    public List<Flashcard> studyTopic(@PathVariable String title) {
+        FlashcardSet flashcardSet = service.getFlashcardSetByTitle(title)
+                .orElseThrow(() -> new RuntimeException("Topic not found with title: " + title));
+        List<Flashcard> flashcards = flashcardSet.getFlashcards();
+        Collections.shuffle(flashcards); // Losowe przetasowanie listy fiszek
+        return flashcards;
+    }
+    @GetMapping("/topic/{title}/start")
+    public String startLearning(@PathVariable String title, Model model) {
+        model.addAttribute("title", title);
+        return "flashcards/study";
+    }
+
+
 }
