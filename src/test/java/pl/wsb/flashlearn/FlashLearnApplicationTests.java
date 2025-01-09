@@ -47,6 +47,17 @@ class FlashLearnApplicationTests {
     }
 
     @Test
+    void shortpasswordFeedback() throws Exception {
+        String shortUser = "shortUser";
+        mockMvc.perform(post("/register")
+                        .param("username", shortUser)
+                        .param("password", "short"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("error", "Error during registration: Password must be at least 6 characters"));
+        userRepository.deleteUserByUsername(shortUser);
+    }
+
+    @Test
     void redirectAuthenticatedToFlashcardsDashboard() throws Exception {
         mockMvc.perform(get("/flashcards")
                         .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
