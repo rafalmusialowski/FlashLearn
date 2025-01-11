@@ -75,9 +75,8 @@ FlashLearn is a Spring Boot application designed for studying and organizing lea
 
 ## Prerequisites
 
-- Java 17 or higher
+- Java 21 or higher 
 - MongoDB
-- Maven
 
 ## Installation
 
@@ -90,12 +89,13 @@ FlashLearn is a Spring Boot application designed for studying and organizing lea
     - Ensure MongoDB is running on `localhost:27017` with the database name `flashlearn` (as defined in `application.properties`).
 3. Build the project:
    ```bash
-   mvn clean install
+   ./gradlew build
    ```
 4. Run the application:
    ```bash
-   mvn spring-boot:run
+   ./gradlew bootRun
    ```
+5. Open http://localhost:8080/ in a web browser
 
 ## Endpoints
 
@@ -126,7 +126,7 @@ Unit tests are located in `FlashLearnApplicationTests.java` and cover various sc
 Run the tests with:
 
 ```bash
-mvn test
+./gradlew test
 ```
 
 ## Technologies Used
