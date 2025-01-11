@@ -27,7 +27,11 @@ public class UserService implements UserDetailsService {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new IllegalArgumentException("A user with that name already exists");
         }
-        checkPasswordLength(password);
+
+        var error = checkPasswordLength(password);
+        if (error != null) {
+            throw error;
+        }
 
         User user = new User();
         user.setUsername(username);
@@ -49,7 +53,10 @@ public class UserService implements UserDetailsService {
     }
 
     public void resetPassword(String oldPassword, String newPassword) {
-        checkPasswordLength(newPassword);
+        var error = checkPasswordLength(newPassword);
+        if (error != null) {
+            throw error;
+        }
 
         if (oldPassword.equals(newPassword)) {
             throw new IllegalArgumentException("New password must be different!");
@@ -57,6 +64,10 @@ public class UserService implements UserDetailsService {
 
         User user = userRepository.findByUsername(getLoggedInUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not logged in"));
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new IllegalArgumentException("Old password is incorrect!");
+        }
 
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
@@ -70,10 +81,11 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
-    private static void checkPasswordLength(String newPassword) {
+    private static IllegalArgumentException checkPasswordLength(String newPassword) {
         if (newPassword.length() < 6) {
-            throw new IllegalArgumentException("Password must be at least 6 characters");
+            return new IllegalArgumentException("Password must be at least 6 characters");
         }
+        return null;
     }
 
     public List<User> getAllUsers() {
