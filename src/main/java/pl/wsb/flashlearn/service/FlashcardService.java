@@ -21,14 +21,6 @@ public class FlashcardService {
         return repository.findAll();
     }
 
-    public Optional<FlashcardSet> getFlashcardSetById(String id) {
-        return repository.findById(id);
-    }
-
-    public FlashcardSet saveFlashcardSet(FlashcardSet flashcard) {
-        return repository.save(flashcard);
-    }
-
     public void deleteFlashcard(String id) {
         repository.deleteById(id);
     }
@@ -62,24 +54,6 @@ public class FlashcardService {
         FlashcardSet flashcardSet = optionalFlashcardSet.get();
         flashcardSet.getFlashcards().add(newFlashcard);
         repository.save(flashcardSet);
-    }
-
-    public void updateFlashcard(String title, String flashcardName, Flashcard updatedFlashcard) {
-        Optional<FlashcardSet> flashcardSetOptional = getFlashcardSetByTitle(title);
-        if (flashcardSetOptional.isPresent()) {
-            FlashcardSet flashcardSet = flashcardSetOptional.get();
-            for (Flashcard flashcard : flashcardSet.getFlashcards()) {
-                if (flashcard.getName().equals(flashcardName)) {
-                    flashcard.setName(updatedFlashcard.getName());
-                    flashcard.setDescription(updatedFlashcard.getDescription());
-                    repository.save(flashcardSet);
-                    return;
-                }
-            }
-            throw new RuntimeException("Flashcard not found");
-        } else {
-            throw new RuntimeException("Topic not found");
-        }
     }
 
     public void deleteFlashcard(String title, String flashcardName) {

@@ -11,22 +11,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/login", "/register", "/styles.css").permitAll()
-                        .requestMatchers("/password_change").authenticated()
-                        .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/flashcards", true)
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll()
-                ).csrf(csrf -> csrf.disable());
+        http.authorizeHttpRequests(authorize -> authorize
+                                .requestMatchers("/css/**", "/js/**", "/images/**", "/login", "/register", "/styles.css").permitAll()
+                                .requestMatchers("/password_change").authenticated()
+                                .anyRequest().authenticated()
+                        )
+                        .formLogin(form -> form
+                                .loginPage("/login")
+                                .defaultSuccessUrl("/flashcards", true)
+                                .permitAll()
+                        )
+                        .logout(logout -> logout
+                                .logoutUrl("/logout")
+                                .logoutSuccessUrl("/login?logout")
+                                .permitAll()
+                        ).csrf(csrf -> csrf.disable());
         return http.build();
     }
 
