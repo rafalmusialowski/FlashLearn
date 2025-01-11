@@ -37,11 +37,10 @@
       <div class="card h-100">
         <div class="card-body">
 
-
           <h5 class="card-title" th:text="${set.title}">Topic name</h5>
           <p class="card-text" th:text="${set.description}">Topic description</p>
           <div class="card-footer text-end">
-            <a th:href="@{/flashcards/topic/{title}(title=${set.title})}" class="btn btn-primary">Chose Topic</a>
+            <a th:href="@{/flashcards/topic/{title}(title=${set.title})}" class="btn btn-primary">Choose Topic</a>
           <a th:href="@{/flashcards/delete/{id}(id=${set.id})}" class="btn btn-danger">Delete</a>
             </div>
         </div>

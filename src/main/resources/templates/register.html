@@ -16,14 +16,14 @@
 
 <div class="container mt-5">
   <h2 class="text-center highlight">Registration</h2>
-  <!-- Wiadomości sukcesu i błędu -->
+
   <div th:if="${message}" class="alert alert-success" role="alert">
     <p th:text="${message}"></p>
   </div>
   <div th:if="${error}" class="alert alert-danger" role="alert">
     <p th:text="${error}"></p>
   </div>
-  <!-- Formularz rejestracyjny -->
+
   <form th:action="@{/register}" method="post" class="bg-dark p-4 shadow-sm rounded">
     <div class="mb-3">
       <label for="username" class="form-label">Username:</label>
@@ -35,7 +35,7 @@
     </div>
     <button type="submit" class="btn btn-primary w-100">Register</button>
   </form>
-  <!-- Przycisk powrotu -->
+
   <div class="text-center mt-3">
     <a href="/login" class="btn btn-warning">Sign in</a>
   </div>

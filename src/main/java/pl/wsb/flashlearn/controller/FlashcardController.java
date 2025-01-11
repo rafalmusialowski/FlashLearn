@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/flashcards")
@@ -22,33 +21,28 @@ public class FlashcardController {
     }
 
     @GetMapping
-    public String flashcardsDashboard(Model model) {
+    public String displayFlashcardsDashboard(Model model) {
         model.addAttribute("flashcards", service.getAllFlashcardSets());
         return "flashcards/dashboard";
     }
 
-    @GetMapping("/new_set")
-    public String showCreateForm(Model model) {
-        model.addAttribute("flashcardset", new FlashcardSet());
-        return "flashcards/form";
-    }
-
-    @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable String id, Model model) {
-        Optional<FlashcardSet> flashcard = service.getFlashcardSetById(id);
-        if (flashcard.isPresent()) {
-            model.addAttribute("flashcard", flashcard.get());
-            return "flashcards/form";
-        } else {
+    @PostMapping
+    public String createFlashcardSet(@RequestParam("name") String name,
+                                     @RequestParam("description") String description,
+                                     Model model) {
+        try {
+            service.createFlashcardSet(name, description);
             return "redirect:/flashcards";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "flashcards/form";
         }
     }
 
-    @PostMapping("/update/{id}")
-    public String updateFlashcard(@PathVariable String id, @ModelAttribute FlashcardSet flashcard) {
-        flashcard.setId(id);
-        service.saveFlashcardSet(flashcard);
-        return "redirect:/flashcards";
+    @GetMapping("/new_set")
+    public String showCreateSetForm(Model model) {
+        model.addAttribute("flashcardset", new FlashcardSet());
+        return "flashcards/form";
     }
 
     @GetMapping("/delete/{id}")
@@ -57,78 +51,39 @@ public class FlashcardController {
         return "redirect:/flashcards";
     }
 
-    @GetMapping("/topic/{title}")
-    public String viewTopic(@PathVariable String title, Model model) {
-        FlashcardSet flashcardSet = service.getFlashcardSetByTitle(title)
-                .orElseThrow(() -> new RuntimeException("FlashcardSet not found with title: " + title));
-        model.addAttribute("flashcardSet", flashcardSet);
-        return "flashcards/topic";
-    }
-
-    @PostMapping
-    public String createFlashcardSet(@RequestParam("name") String name,
-                                     @RequestParam("description") String description,
-                                     Model model) {
-
-        if (name == null || name.isEmpty()) {
-            model.addAttribute("error", "The topic name must not be empty!");
+    @GetMapping("/topic/{topic}")
+    public String displayTopic(@PathVariable String topic, Model model) {
+        try {
+            FlashcardSet flashcardSet = getFlashcardSetOrThrow(topic);
+            model.addAttribute("flashcardSet", flashcardSet);
+            return "flashcards/topic";
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
             return "flashcards/form";
         }
-
-        Optional<FlashcardSet> existingSet = service.getFlashcardSetByTitle(name);
-        if (existingSet.isPresent()) {
-            model.addAttribute("error", "Topic with name '" + name + "' already exists!");
-            return "flashcards/form";
-        }
-
-        FlashcardSet newSet = new FlashcardSet();
-        newSet.setTitle(name);
-        newSet.setDescription(description);
-        service.saveFlashcardSet(newSet);
-
-        return "redirect:/flashcards";
     }
 
-    @PostMapping("/topic/{title}/add")
-    public String addFlashcardToTopic(@PathVariable String title,
+    private FlashcardSet getFlashcardSetOrThrow(String topic) {
+        return service.getFlashcardSetByTitle(topic)
+                .orElseThrow(() -> new RuntimeException("Topic not found with title: " + topic));
+    }
+
+    @PostMapping("/topic/{topicTitle}/add")
+    public String addFlashcardToTopic(@PathVariable String topicTitle,
                                       @RequestParam String name,
                                       @RequestParam String description,
                                       Model model) {
-        Optional<FlashcardSet> flashcardSetOptional = service.getFlashcardSetByTitle(title);
-        if (flashcardSetOptional.isEmpty()) {
-            model.addAttribute("error", "Topic not found");
-            return "flashcards/topic";
+        if (name == null || name.isBlank() || description == null || description.isBlank()) {
+            model.addAttribute("error", "Name and description must not be empty.");
+            return "flashcards/topic/" + topicTitle;
         }
 
-        FlashcardSet flashcardSet = flashcardSetOptional.get();
-        Flashcard flashcard = new Flashcard(name, description);
-        service.addFlashcardToTopic(title, flashcard);
-
-        return "redirect:/flashcards/topic/" + title;
-    }
-
-    @GetMapping("/topic/{title}/edit/{flashcardName}")
-    public String showEditFlashcardForm(@PathVariable String title, @PathVariable String flashcardName, Model model) {
-        Optional<FlashcardSet> flashcardSetOptional = service.getFlashcardSetByTitle(title);
-        if (flashcardSetOptional.isPresent()) {
-            FlashcardSet flashcardSet = flashcardSetOptional.get();
-            for (Flashcard flashcard : flashcardSet.getFlashcards()) {
-                if (flashcard.getName().equals(flashcardName)) {
-                    model.addAttribute("flashcard", flashcard);
-                    model.addAttribute("flashcardSetTitle", title);
-                    return "flashcards/edit-flashcard";
-                }
-            }
+        try {
+            service.addFlashcardToTopic(topicTitle, name, description);
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
         }
-        return "redirect:/flashcards/topic/" + title;
-    }
-
-    @PostMapping("/topic/{title}/update/{flashcardName}")
-    public String updateFlashcard(@PathVariable String title, @PathVariable String flashcardName,
-                                  @RequestParam String name, @RequestParam String description) {
-        Flashcard updatedFlashcard = new Flashcard(name, description);
-        service.updateFlashcard(title, flashcardName, updatedFlashcard);
-        return "redirect:/flashcards/topic/" + title;
+        return "flashcards/topic/" + topicTitle;
     }
 
     @GetMapping("/topic/{title}/delete/{flashcardName}")
@@ -136,15 +91,16 @@ public class FlashcardController {
         service.deleteFlashcard(title, flashcardName);
         return "redirect:/flashcards/topic/" + title;
     }
-    @GetMapping("/topic/{title}/study")
+
+    @GetMapping("/topic/{topic}/study")
     @ResponseBody
-    public List<Flashcard> studyTopic(@PathVariable String title) {
-        FlashcardSet flashcardSet = service.getFlashcardSetByTitle(title)
-                .orElseThrow(() -> new RuntimeException("Topic not found with title: " + title));
+    public List<Flashcard> enterStudyMode(@PathVariable String topic) {
+        FlashcardSet flashcardSet = getFlashcardSetOrThrow(topic);
         List<Flashcard> flashcards = flashcardSet.getFlashcards();
         Collections.shuffle(flashcards);
         return flashcards;
     }
+
     @GetMapping("/topic/{title}/start")
     public String startLearning(@PathVariable String title, Model model) {
         model.addAttribute("title", title);

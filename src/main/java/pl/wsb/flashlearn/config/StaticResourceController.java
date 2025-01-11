@@ -12,7 +12,7 @@ public class StaticResourceController {
 
     @GetMapping(value = {"/styles.css", "/flashcards/styles.css", "/flashcards/topic/styles.css"})
     public ResponseEntity<Resource> getStaticResource(@RequestParam(value = "path", required = false) String path) {
-        String resourcePath = "static/css/styles.css"; // Default path
+        String resourcePath = "static/css/styles.css";
         if (path != null) {
             resourcePath = "static/css/" + path;
         }

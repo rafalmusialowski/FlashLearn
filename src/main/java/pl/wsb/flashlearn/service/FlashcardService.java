@@ -37,32 +37,35 @@ public class FlashcardService {
         return repository.findByTitle(title);
     }
 
-    public FlashcardSet createFlashcardSet(String title, String description) {
-        Optional<FlashcardSet> existingSet = repository.findByTitle(title);
-        if (existingSet.isPresent()) {
+    public void createFlashcardSet(String title, String description) {
+        if (title == null || title.isEmpty()) {
+            throw new IllegalArgumentException("The topic name must not be empty!");
+        }
+
+        if (getFlashcardSetByTitle(title).isPresent()) {
             throw new IllegalArgumentException("A collection with the given name already exists!");
         }
 
         FlashcardSet newSet = new FlashcardSet();
         newSet.setTitle(title);
         newSet.setDescription(description);
-
-        return repository.save(newSet);
+        repository.save(newSet);
     }
 
-    public void addFlashcardToTopic(String title, Flashcard flashcard) {
-        Optional<FlashcardSet> flashcardSetOptional = repository.findByTitle(title);
-        if (flashcardSetOptional.isEmpty()) {
+    public void addFlashcardToTopic(String title, String name, String description) {
+        Optional<FlashcardSet> optionalFlashcardSet = getFlashcardSetByTitle(title);
+        if (optionalFlashcardSet.isEmpty()) {
             throw new RuntimeException("Topic not found");
         }
 
-        FlashcardSet flashcardSet = flashcardSetOptional.get();
-        flashcardSet.getFlashcards().add(flashcard);
+        Flashcard newFlashcard = new Flashcard(name, description);
+        FlashcardSet flashcardSet = optionalFlashcardSet.get();
+        flashcardSet.getFlashcards().add(newFlashcard);
         repository.save(flashcardSet);
     }
 
     public void updateFlashcard(String title, String flashcardName, Flashcard updatedFlashcard) {
-        Optional<FlashcardSet> flashcardSetOptional = repository.findByTitle(title);
+        Optional<FlashcardSet> flashcardSetOptional = getFlashcardSetByTitle(title);
         if (flashcardSetOptional.isPresent()) {
             FlashcardSet flashcardSet = flashcardSetOptional.get();
             for (Flashcard flashcard : flashcardSet.getFlashcards()) {
@@ -80,7 +83,7 @@ public class FlashcardService {
     }
 
     public void deleteFlashcard(String title, String flashcardName) {
-        Optional<FlashcardSet> flashcardSetOptional = repository.findByTitle(title);
+        Optional<FlashcardSet> flashcardSetOptional = getFlashcardSetByTitle(title);
         if (flashcardSetOptional.isPresent()) {
             FlashcardSet flashcardSet = flashcardSetOptional.get();
             flashcardSet.getFlashcards().removeIf(flashcard -> flashcard.getName().equals(flashcardName));
