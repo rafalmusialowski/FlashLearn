@@ -57,4 +57,18 @@ public class AuthController {
             return "register";
         }
     }
+
+    @PostMapping("/password_change")
+    public String resetPassword(@RequestParam("old_password") String oldPassword,
+                                @RequestParam("new_password") String newPassword,
+                                Model model) {
+        try {
+            userService.resetPassword(oldPassword, newPassword);
+            model.addAttribute("message", "Password change completed with success!");
+            return "password_change";
+        } catch (Exception e) {
+            model.addAttribute("error", "Error during password change: " + e.getMessage());
+            return "password_change";
+        }
+    }
 }

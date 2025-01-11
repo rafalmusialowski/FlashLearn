@@ -1,5 +1,7 @@
 package pl.wsb.flashlearn.service;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,9 +27,7 @@ public class UserService implements UserDetailsService {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new IllegalArgumentException("A user with that name already exists");
         }
-        if (password.length() < 6) {
-            throw new IllegalArgumentException("Password must be at least 6 characters");
-        }
+        checkPasswordLength(password);
 
         User user = new User();
         user.setUsername(username);
@@ -46,6 +46,34 @@ public class UserService implements UserDetailsService {
                 .password(user.getPassword())
                 .roles("USER")
                 .build();
+    }
+
+    public void resetPassword(String oldPassword, String newPassword) {
+        checkPasswordLength(newPassword);
+
+        if (oldPassword.equals(newPassword)) {
+            throw new IllegalArgumentException("New password must be different!");
+        }
+
+        User user = userRepository.findByUsername(getLoggedInUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not logged in"));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    private String getLoggedInUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            return authentication.getName();
+        }
+        return null;
+    }
+
+    private static void checkPasswordLength(String newPassword) {
+        if (newPassword.length() < 6) {
+            throw new IllegalArgumentException("Password must be at least 6 characters");
+        }
     }
 
     public List<User> getAllUsers() {
