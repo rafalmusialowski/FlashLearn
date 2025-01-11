@@ -4,6 +4,25 @@
 
 FlashLearn is a Spring Boot application designed for studying and organizing learning materials using flashcards. The application features user authentication, role management, and CRUD operations for flashcard topics and individual flashcards. FlashLearn is built with a MongoDB backend for data persistence.
 
+## User Stories
+
+As a user, I want to register an account so that I can access the application's features.
+As a user, I want to log in to my account to access my data and flashcards.
+As a user, I want to create new flashcard sets to organize my learning materials.
+As a user, I want to edit flashcard sets to update their content.
+As a user, I want to study flashcards in random order to improve my learning process.
+As a user, I want to change my password to ensure my account's security.
+
+## Identification of Two Target Audiences
+
+Students preparing for exams.
+Professionals learning new skills or terminology.
+
+## Two Potential Benefits for Users
+
+Improved learning efficiency by organizing materials into flashcard sets.
+Flexibility to study anytime and anywhere with a simple interface.
+
 ## Features
 
 - **User Management:** Registration, login, and password change functionality.
