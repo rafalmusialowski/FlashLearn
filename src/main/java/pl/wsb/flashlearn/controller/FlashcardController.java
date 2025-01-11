@@ -75,7 +75,7 @@ public class FlashcardController {
                                       Model model) {
         if (name == null || name.isBlank() || description == null || description.isBlank()) {
             model.addAttribute("error", "Name and description must not be empty.");
-            return "flashcards/topic/" + topicTitle;
+            return "redirect:/flashcards/topic/" + topicTitle;
         }
 
         try {
@@ -83,7 +83,7 @@ public class FlashcardController {
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
         }
-        return "flashcards/topic/" + topicTitle;
+        return "redirect:/flashcards/topic/" + topicTitle;
     }
 
     @GetMapping("/topic/{title}/delete/{flashcardName}")
