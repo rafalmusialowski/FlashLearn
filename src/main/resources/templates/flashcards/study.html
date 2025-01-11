@@ -17,23 +17,28 @@
     </div>
 </div>
 
-<div class="container mt-5">
-    <h1 class="text-center mb-4">Topic: <span id="topic-title"></span></h1>
+<div class="container mt-5" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <h1 class="text-center mb-4">Topic: <span id="topic-title"></span></h1> <br>
 
-    <div id="flashcard-container" class="text-center">
+    <div id="flashcard-container" class="text-center" style="height: 100px; width: 500px; background-color: #FFFFFF;
+    border-radius: 10px;">
         <div id="flashcard" style="display: none;">
             <h3 id="flashcard-name"></h3>
-            <p id="flashcard-description" style="display: none; margin-top: 10px;"></p>
-            <div style="display: flex; justify-content: center; align-items: center; height: 100px;">
+            <p id="flashcard-description" style="display: none; font-style: italic; min-height: 38px; color: #000000"></p>
+            <div style="display: flex; justify-content: center; align-items: center; ">
                 <button id="show-description"  class="btn btn-info mt-3">Show Description</button>
             </div>
-            <div class="mt-3">
-                <button id="know-button" class="btn btn-success">I Know This</button>
-                <button id="save-button" class="btn btn-warning">Save for Later</button>
-            </div>
         </div>
-        <p id="no-more-cards" style="display: none;">No more flashcards to show!</p>
     </div>
+    <div class="mt-3" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+        <button id="know-button" class="btn btn-success">I Know This</button>
+        <button id="save-button" class="btn btn-warning">Save for Later</button>
+    </div>
+    <h2 class="text-center mb-4" id="no-more-cards" style="display: none;">
+        No more flashcards to display. Good job! <br>
+        <button id="repeat-button" class="btn btn-warning" style="margin-top: 20px;">Repeat the topic</button>
+        <button id="return-button" class="btn btn-warning" style="margin-top: 20px;">Return to topics</button>
+    </h2>
 </div>
 
 <script>
@@ -55,6 +60,8 @@
         if (currentFlashcardIndex >= flashcards.length) {
             document.getElementById('flashcard-container').style.display = 'none';
             document.getElementById('no-more-cards').style.display = 'block';
+            document.getElementById('know-button').style.display = 'none';
+            document.getElementById('save-button').style.display = 'none';
             return;
         }
 
@@ -75,6 +82,12 @@
     document.getElementById('save-button').addEventListener('click', () => {
         flashcards.push(flashcards[currentFlashcardIndex]);
         showNextFlashcard();
+    });
+    document.getElementById('return-button').addEventListener('click', () => {
+        window.location.href = '/flashcards';
+    });
+    document.getElementById('repeat-button').addEventListener('click', () => {
+        window.location.href = `/flashcards/topic/${topicTitle}/start`;
     });
 
     fetchFlashcards();
