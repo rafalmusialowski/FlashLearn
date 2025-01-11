@@ -31,6 +31,9 @@ public class AuthController {
         return "register";
     }
 
+    @GetMapping("/password_change")
+    public String passwordChange() {return "password_change";}
+
     @GetMapping("/all-users")
     @ResponseBody
     public List<User> getAllUsers() {
